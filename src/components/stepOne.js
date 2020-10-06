@@ -6,10 +6,22 @@ const StepOne = ({
   secondary,
   setPrimary,
   setSecondary,
+  subCategory,
+  setSubCategory,
   scans,
-  bodyParts,
+  types,
   setCurrentStep,
 }) => {
+  var sub;
+
+  if (primary !== null && secondary !== null) {
+    types.map((type) => {
+      if (type.scan === primary && type.category === secondary) {
+        sub = type.subCategory;
+      }
+    });
+  }
+  console.log(sub);
   return (
     <div>
       <div>
@@ -30,46 +42,89 @@ const StepOne = ({
         ) : (
           <Label image style={{ margin: 5 }}>
             {primary}
-            <Icon name="delete" onClick={() => setPrimary(null)} />
+            <Icon
+              name="delete"
+              onClick={() => {
+                setPrimary(null);
+                setSecondary(null);
+                setSubCategory(null);
+              }}
+            />
           </Label>
         )}
       </div>
       <div>
         {primary !== null && secondary === null
-          ? bodyParts.map((body) => {
-              return (
-                <Label
-                  image
-                  color="orange"
-                  size="large"
-                  onClick={() => setSecondary(body)}
-                  style={{ cursor: "pointer", margin: 5 }}
-                >
-                  {body}
-                </Label>
-              );
+          ? types.map((type) => {
+              if (type.scan === primary) {
+                return (
+                  <Label
+                    image
+                    color="orange"
+                    size="large"
+                    onClick={() => setSecondary(type.category)}
+                    style={{ cursor: "pointer", margin: 5 }}
+                  >
+                    {type.category}
+                  </Label>
+                );
+              }
             })
           : primary !== null &&
             secondary !== null && (
               <Label image style={{ margin: 5 }}>
                 {secondary}
-                <Icon name="delete" onClick={() => setSecondary(null)} />
+                <Icon
+                  name="delete"
+                  onClick={() => {
+                    setSecondary(null);
+                    setSubCategory(null);
+                  }}
+                />
               </Label>
             )}
       </div>
       <div>
-        {primary !== null && secondary !== null && (
-          <Button
-            icon
-            labelPosition="right"
-            color="orange"
-            style={{ marginTop: 50 }}
-            onClick={() => setCurrentStep(2)}
-          >
-            Next
-            <Icon name="right arrow" />
-          </Button>
-        )}
+        {primary !== null && secondary !== null && subCategory === null
+          ? sub.length > 0 &&
+            sub.map((type) => {
+              return (
+                <Label
+                  image
+                  color="orange"
+                  size="large"
+                  onClick={() => setSubCategory(type)}
+                  style={{ cursor: "pointer", margin: 5 }}
+                >
+                  {type}
+                </Label>
+              );
+            })
+          : primary !== null &&
+            secondary !== null &&
+            sub.length > 0 &&
+            subCategory !== null && (
+              <Label image style={{ margin: 5 }}>
+                {subCategory}
+                <Icon name="delete" onClick={() => setSubCategory(null)} />
+              </Label>
+            )}
+      </div>
+      <div>
+        {primary !== null &&
+          secondary !== null &&
+          (subCategory !== null || sub.length === 0) && (
+            <Button
+              icon
+              labelPosition="right"
+              color="orange"
+              style={{ marginTop: 50 }}
+              onClick={() => setCurrentStep(2)}
+            >
+              Next
+              <Icon name="right arrow" />
+            </Button>
+          )}
       </div>
     </div>
   );

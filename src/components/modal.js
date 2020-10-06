@@ -119,7 +119,7 @@ const PaymentModal = ({ modal, setModal, scanData }) => {
             </List.Item>
             <List.Item>
               <List.Icon name="marker" />
-              <List.Content>City: {scanData.city}</List.Content>
+              <List.Content>Center: {scanData.center}</List.Content>
             </List.Item>
             <List.Item>
               <List.Icon name="linkify" />

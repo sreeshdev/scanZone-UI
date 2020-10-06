@@ -2,57 +2,66 @@ import React from "react";
 import { Icon, Label, Button, Transition } from "semantic-ui-react";
 
 const StepTwo = ({
-  city,
-  setCity,
+  center,
+  setCenter,
+  scanCenters,
   locality,
   setLocality,
   cities,
   localities,
   setCurrentStep,
 }) => {
+  var sub;
+  if (locality !== null) {
+    scanCenters.map((center) => {
+      if (center.Locality === locality) {
+        sub = center.Center;
+      }
+    });
+  }
   return (
     <div>
       <div>
-        {city === null ? (
-          cities.map((city) => {
+        {locality === null ? (
+          scanCenters.map((city) => {
             return (
               <Label
                 image
                 color="orange"
                 size="large"
-                onClick={() => setCity(city)}
+                onClick={() => setLocality(city.Locality)}
                 style={{ cursor: "pointer", margin: 5 }}
               >
-                {city}
+                {city.Locality}
               </Label>
             );
           })
         ) : (
           <Label image style={{ margin: 5 }}>
-            {city}
-            <Icon name="delete" onClick={() => setCity(null)} />
+            {locality}
+            <Icon name="delete" onClick={() => setLocality(null)} />
           </Label>
         )}
       </div>
       <div>
-        {city !== null && locality === null
-          ? localities.map((locality) => {
+        {locality !== null && center === null
+          ? sub.map((locality) => {
               return (
                 <Label
                   image
                   color="orange"
                   size="large"
-                  onClick={() => setLocality(locality)}
+                  onClick={() => setCenter(locality)}
                   style={{ cursor: "pointer", margin: 5 }}
                 >
                   {locality}
                 </Label>
               );
             })
-          : locality !== null && (
+          : center !== null && (
               <Label image style={{ margin: 5 }}>
-                {locality}
-                <Icon name="delete" onClick={() => setLocality(null)} />
+                {center}
+                <Icon name="delete" onClick={() => setCenter(null)} />
               </Label>
             )}
       </div>
@@ -66,7 +75,7 @@ const StepTwo = ({
           Back
           <Icon name="left arrow" />
         </Button>
-        {city !== null && locality !== null && (
+        {center !== null && locality !== null && (
           <Button
             icon
             labelPosition="right"
